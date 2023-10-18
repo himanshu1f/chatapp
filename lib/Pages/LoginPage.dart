@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:chat/utility/asset_path.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -22,39 +23,26 @@ class LoginScreenState extends State<LoginScreen> {
   final GoogleSignIn googleSignIn = GoogleSignIn();
   final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
   SharedPreferences? preferences;
-
   bool isLoggedIn = false;
   bool isLoading = false;
-  // FirebaseUser? currentUser;
+  User? currentUser;
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     isSignedIn();
   }
 
-  void isSignedIn() async
-  {
-    setState(() {
-      isLoggedIn = true;
-    });
+  void isSignedIn() async {
     preferences = await SharedPreferences.getInstance();
-
     isLoggedIn = await googleSignIn.isSignedIn();
-    if(isLoggedIn)
-    {
-      // Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomeScreen(currentUserId: preferences!.getString(""))));
+    if(isLoggedIn) {
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomeScreen(currentUserId: preferences!.getString(""))));
     }
-
-    setState(() {
-      isLoading = false;
-    });
   }
 
   @override
-  Widget build(BuildContext context)
-  {
+  Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(
@@ -74,16 +62,16 @@ class LoginScreenState extends State<LoginScreen> {
               style: TextStyle(fontSize: 82.0, color: Colors.white, fontFamily: "Signatra"),
             ),
             GestureDetector(
-              // onTap: controlSignIn,
+              onTap: controlSignIn,
               child: Center(
                 child: Column(
                   children: <Widget>[
                     Container(
                       width: 270.0,
                       height: 65.0,
-                      decoration: const BoxDecoration(
+                      decoration: BoxDecoration(
                         image: DecorationImage(
-                          image: AssetImage("assets/images/google_sign_in_button.png"),
+                          image: AssetImage(AssetPath().google),
                           fit: BoxFit.cover,
                         ),
                       ),
@@ -103,74 +91,56 @@ class LoginScreenState extends State<LoginScreen> {
   }
 
 
-//   Future<Null> controlSignIn() async
-//   {
-//     preferences = await SharedPreferences.getInstance();
-//
-//     setState(() {
-//       isLoading = true;
-//     });
-//
-//     GoogleSignInAccount? googleUser = await googleSignIn.signIn();
-//     GoogleSignInAuthentication googleAuthentication = await googleUser!.authentication;
-//
-//     final AuthCredential credential = GoogleAuthProvider
-//         .getCredential(idToken: googleAuthentication.idToken, accessToken: googleAuthentication.accessToken);
-//
-//     FirebaseUser firebaseUser = (await firebaseAuth.signInWithCredential(credential)).user;
-//
-//     //SignIn Success
-//     if(firebaseUser != null)
-//     {
-//       //Check if already SignUp
-//       final QuerySnapshot resultQuery = await Firestore.instance.collection("users")
-//           .where("id", isEqualTo: firebaseUser.uid).getDocuments();
-//
-//       final List<DocumentSnapshot> documentSnapshots = resultQuery.documents;
-//
-//       //Save Data to firestore - if new user
-//       if(documentSnapshots.length == 0)
-//       {
-//         Firestore.instance.collection("users").document(firebaseUser.uid).setData({
-//           "nickname" : firebaseUser.displayName,
-//           "photoUrl" : firebaseUser.photoUrl,
-//           "id" : firebaseUser.uid,
-//           "aboutMe" : "I am using Himo Chat app.",
-//           "createAt" : DateFormat("MMMM dd, yyyy HH:MM a").format(DateTime.now()).toString(),
-// //          "createAt" : DateTime.now().millisecondsSinceEpoch.toString(),
-//           "chattingWith" : null,
-//         });
-//
-//         //Write data to Local
-//         currentUser = firebaseUser;
-//         await preferences!.setString("id", currentUser!.uid);
-//         await preferences!.setString("nickname", currentUser!.displayName);
-//         await preferences!.setString("photoUrl", currentUser!.photoUrl);
-//       }
-//       else
-//       {
-//         //Write data to Local
-//         currentUser = firebaseUser;
-//         await preferences!.setString("id", documentSnapshots[0]["id"]);
-//         await preferences!.setString("nickname", documentSnapshots[0]["nickname"]);
-//         await preferences!.setString("photoUrl", documentSnapshots[0]["photoUrl"]);
-//         await preferences!.setString("aboutMe", documentSnapshots[0]["aboutMe"]);
-//       }
-//       Fluttertoast.showToast(msg: "Congratulation, Sign in Successful");
-//       this.setState(() {
-//         isLoading = false;
-//       });
-//
-//       Navigator.push(context, MaterialPageRoute(builder: (context) => HomeScreen(currentUserId: firebaseUser.uid)));
-//     }
-//     //SignIn Not Success - SignIn Failed
-//     else
-//     {
-//         Fluttertoast.showToast(msg: "Try Again, Sign in Failed");
-//         this.setState(() {
-//           isLoading = false;
-//         });
-//     }
-//   }
+  controlSignIn() async {
+    GoogleSignInAccount? googleUser = await googleSignIn.signIn();
+    GoogleSignInAuthentication googleAuthentication = await googleUser!.authentication;
 
+    final AuthCredential credential = GoogleAuthProvider.credential(
+      idToken: googleAuthentication.idToken,
+      accessToken: googleAuthentication.accessToken,
+    );
+    User? firebaseUser = (await firebaseAuth.signInWithCredential(credential)).user;
+
+    //SignIn Success
+    if(firebaseUser != null) {
+      //Check if already SignUp
+      // final QuerySnapshot resultQuery = await Firestore.instance.collection("users")
+      //     .where("id", isEqualTo: firebaseUser.uid).getDocuments();
+      final QuerySnapshot resultQuery = await FirebaseFirestore.instance.collection("users")
+          .where("id", isEqualTo: firebaseUser.uid).get();
+
+      final List<DocumentSnapshot> documentSnapshots = resultQuery.docs;
+
+      //Save Data to firestore - if new user
+      if(documentSnapshots.isEmpty) {
+        FirebaseFirestore.instance.collection("users").doc(firebaseUser.uid).set({
+          "nickname" : firebaseUser.displayName,
+          "photoUrl" : firebaseUser.photoURL,
+          "id" : firebaseUser.uid,
+          "aboutMe" : "I am using Himo Chat app.",
+          "createAt" : DateFormat("MMMM dd, yyyy HH:MM a").format(DateTime.now()).toString(),
+          "chattingWith" : null,
+        });
+
+        //Write data to Local
+        currentUser = firebaseUser;
+        await preferences!.setString("id", currentUser!.uid);
+        await preferences!.setString("nickname", currentUser!.displayName!);
+        // await preferences!.setString("photoUrl", currentUser!.photoURL!);
+      } else {
+        //Write data to Local
+        currentUser = firebaseUser;
+        await preferences!.setString("id", documentSnapshots[0]["id"]);
+        await preferences!.setString("nickname", documentSnapshots[0]["nickname"]);
+        // await preferences!.setString("photoUrl", documentSnapshots[0]["photoUrl"]);
+        await preferences!.setString("aboutMe", documentSnapshots[0]["aboutMe"]);
+      }
+      Fluttertoast.showToast(msg: "Congratulation, Sign in Successful");
+
+      Navigator.push(context, MaterialPageRoute(builder: (context) => HomeScreen(currentUserId: firebaseUser.uid)));
+    } else {
+      //SignIn Not Success - SignIn Failed
+      Fluttertoast.showToast(msg: "Try Again, Sign in Failed");
+    }
+  }
 }

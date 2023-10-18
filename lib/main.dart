@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Telegram Clone',
+      title: 'Himo Chat',
       theme: ThemeData(
         primaryColor: Colors.lightBlueAccent,
       ),
