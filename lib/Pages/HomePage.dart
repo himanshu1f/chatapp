@@ -31,29 +31,29 @@ class HomeScreenState extends State<HomeScreen> {
         IconButton(
           icon: Icon(Icons.settings, size: 30.0, color: Colors.white,),
           onPressed: (){
-            // Navigator.push(context, MaterialPageRoute(builder: (context) => AccountSettings()));
+            Navigator.push(context, MaterialPageRoute(builder: (context) => AccountSettings()));
           },
         ),
       ],
       backgroundColor: Colors.lightBlue,
       title: Container(
-        margin: new EdgeInsets.only(bottom: 4.0),
+        margin: const EdgeInsets.only(bottom: 4.0),
         child: TextFormField(
-          style: TextStyle(fontSize: 18.0, color: Colors.white),
+          style: const TextStyle(fontSize: 18.0, color: Colors.white),
           controller: searchTextEditingController,
           decoration: InputDecoration(
             hintText: "Search here...",
-            hintStyle: TextStyle(color: Colors.white),
+            hintStyle: const TextStyle(color: Colors.white),
             enabledBorder: const UnderlineInputBorder(
               borderSide: BorderSide(color: Colors.grey),
             ),
-            focusedBorder: UnderlineInputBorder(
+            focusedBorder: const UnderlineInputBorder(
               borderSide: BorderSide(color: Colors.white),
             ),
             filled: true,
-            prefixIcon: Icon(Icons.person_pin, color: Colors.white, size: 30.0,),
+            prefixIcon: const Icon(Icons.person_pin, color: Colors.white, size: 30.0,),
             suffixIcon: IconButton(
-              icon: Icon(Icons.clear, color: Colors.white,),
+              icon: const Icon(Icons.clear, color: Colors.white,),
               onPressed: emptyTextFormField,
             ),
           ),
@@ -64,15 +64,12 @@ class HomeScreenState extends State<HomeScreen> {
   }
 
 
-  controlSearching(String userName)
-  {
+  controlSearching(String userName) {
     Future<QuerySnapshot> allFoundUsers = FirebaseFirestore.instance.collection("users")
         .where("nickname", isGreaterThanOrEqualTo: userName).get();
-
     setState(() {
       futureSearchResults = allFoundUsers;
     });
-
   }
 
   emptyTextFormField()
@@ -90,24 +87,18 @@ class HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  displayTheUserFoundScreen()
-  {
+  displayTheUserFoundScreen() {
     return FutureBuilder(
       future: futureSearchResults,
-      builder: (context, dataSnapshot)
-      {
-        if(!dataSnapshot.hasData)
-          {
+      builder: (context, dataSnapshot) {
+        if(!dataSnapshot.hasData) {
             return circularProgress();
-          }
-
+        }
         List<UserResult> searchUserResult = [];
         for (var document in dataSnapshot.data!.docs) {
           UserModel eachUser = UserModel.fromDocument(document);
           UserResult userResult = UserResult(eachUser);
-
-          if(widget.currentUserId != document["id"])
-          {
+          if(widget.currentUserId != document["id"]) {
            searchUserResult.add(userResult);
           }
         }
@@ -125,7 +116,7 @@ class HomeScreenState extends State<HomeScreen> {
       child: Center(
         child: ListView(
           shrinkWrap: true,
-          children: <Widget>[
+          children: const <Widget>[
             Icon(Icons.group, color: Colors.lightBlueAccent, size: 200.0,),
             Text(
               "Search Users",
@@ -152,7 +143,7 @@ class UserResult extends StatelessWidget
   Widget build(BuildContext context)
   {
     return Padding(
-      padding: EdgeInsets.all(4.0),
+      padding: const EdgeInsets.all(4.0),
       child: Container(
         color: Colors.white,
         child: Column(
@@ -166,15 +157,15 @@ class UserResult extends StatelessWidget
                 ),
                 title: Text(
                   eachUser.nickname!,
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: Colors.black, fontSize: 16.0, fontWeight: FontWeight.bold,
                   ),
                 ),
                 subtitle: Text(
-                  "About Me : "+ eachUser.aboutMe.toString(),
+                  "About Me : ${eachUser.aboutMe}",
 //                      + DateFormat("dd MMMM, yyyy - hh:mm aa")
 //                  .format(DateTime.fromMillisecondsSinceEpoch(int.parse(eachUser.createdAt))),
-                  style: TextStyle(color: Colors.grey, fontSize: 14.0, fontStyle: FontStyle.italic,),
+                  style: const TextStyle(color: Colors.grey, fontSize: 14.0, fontStyle: FontStyle.italic,),
                 ),
               ),
             ),
@@ -185,11 +176,11 @@ class UserResult extends StatelessWidget
   }
 
   sendUserToChatPage(BuildContext context) {
-    // Navigator.push(context, MaterialPageRoute(
-    //     builder: (context) => Chat(
-    //         receiverId: eachUser.id,
-    //         receiverAvatar: eachUser.photoUrl,
-    //         receiverName: eachUser.nickname)));
+    Navigator.push(context, MaterialPageRoute(
+        builder: (context) => Chat(
+            receiverId: eachUser.id,
+            receiverAvatar: eachUser.photoUrl,
+            receiverName: eachUser.nickname)));
   }
 
 }
