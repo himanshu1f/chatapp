@@ -77,7 +77,7 @@ class SettingsScreenState extends State<SettingsScreen>
     id = preferences!.getString("id")!;
     nickname = preferences!.getString("nickname")!;
     aboutMe = preferences!.getString("aboutMe")!;
-    photoUrl = preferences!.getString("photoUrl")!;
+    // photoUrl = preferences!.getString("photoUrl")!;
 
     nicknameTextEditingController = TextEditingController(text: nickname);
     aboutMeTextEditingController = TextEditingController(text: aboutMe);

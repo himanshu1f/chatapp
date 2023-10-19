@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:chat/util/colors.dart';
 import 'package:chat/utility/asset_path.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -37,53 +38,31 @@ class LoginScreenState extends State<LoginScreen> {
     preferences = await SharedPreferences.getInstance();
     isLoggedIn = await googleSignIn.isSignedIn();
     if(isLoggedIn) {
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomeScreen(currentUserId: preferences!.getString(""))));
+      Navigator.of(context).pushNamed('/home');
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topRight,
-            end: Alignment.bottomLeft,
-            colors: [Colors.lightBlueAccent, Colors.purpleAccent],
-          ),
-        ),
-        alignment: Alignment.center,
+      backgroundColor: colorBg,
+      body: GestureDetector(
+        onTap: controlSignIn,
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              "Himo Chat",
-              style: TextStyle(fontSize: 82.0, color: Colors.white, fontFamily: "Signatra"),
+          crossAxisAlignment: CrossAxisAlignment.end,
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            const SizedBox(height: 20),
+            Padding(
+              padding: const EdgeInsets.all(1.0),
+              child: isLoading ? circularProgress() : Container(),
             ),
-            GestureDetector(
-              onTap: controlSignIn,
-              child: Center(
-                child: Column(
-                  children: <Widget>[
-                    Container(
-                      width: 270.0,
-                      height: 65.0,
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          image: AssetImage(AssetPath().google),
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(1.0),
-                      child: isLoading ? circularProgress() : Container(),
-                    ),
-                  ],
-                ),
-              ),
+            const SizedBox(height: 20),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(30),
+              child: Image.asset(AssetPath().google, fit: BoxFit.fill, width: double.infinity, height: 80),
             ),
+            const SizedBox(height: 10),
           ],
         ),
       ),
@@ -92,6 +71,10 @@ class LoginScreenState extends State<LoginScreen> {
 
 
   controlSignIn() async {
+    setState(() {
+      isLoading = true;
+    });
+
     GoogleSignInAccount? googleUser = await googleSignIn.signIn();
     GoogleSignInAuthentication googleAuthentication = await googleUser!.authentication;
 
@@ -137,10 +120,13 @@ class LoginScreenState extends State<LoginScreen> {
       }
       Fluttertoast.showToast(msg: "Congratulation, Sign in Successful");
 
-      Navigator.push(context, MaterialPageRoute(builder: (context) => HomeScreen(currentUserId: firebaseUser.uid)));
+      Navigator.of(context).pushNamed('/home');
     } else {
       //SignIn Not Success - SignIn Failed
       Fluttertoast.showToast(msg: "Try Again, Sign in Failed");
     }
+    setState(() {
+      isLoading = false;
+    });
   }
 }
