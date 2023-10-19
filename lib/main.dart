@@ -1,4 +1,7 @@
+import 'package:chat/Pages/AccountSettingsPage.dart';
+import 'package:chat/Pages/HomePage.dart';
 import 'package:chat/splash/splash_Scree.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'Pages/LoginPage.dart';
@@ -20,10 +23,17 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Himo Chat',
+      initialRoute: '/',
+      routes: {
+        '/' : (context) => const SplashScreen(),
+        '/login': (context) => LoginScreen(),
+        '/home': (context) => HomeScreen(currentUserId: ""),
+        '/setting': (context) => const AccountSettings(),
+      },
       theme: ThemeData(
-        primaryColor: Colors.lightBlueAccent,
+          primarySwatch: Colors.blue,
+          brightness: Brightness.light
       ),
-      home: SplashScreen(),
       debugShowCheckedModeBanner: false,
     );
   }

@@ -1,6 +1,7 @@
 import 'package:chat/util/colors.dart';
 import 'package:chat/utility/asset_path.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -10,6 +11,27 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+
+  final GoogleSignIn googleSignIn = GoogleSignIn();
+
+  @override
+  void initState() {
+    redirect();
+    super.initState();
+  }
+
+  redirect() async{
+    bool isLoggedIn = await googleSignIn.isSignedIn();
+
+    Future.delayed(const Duration(seconds: 3)).then((value) {
+      if(isLoggedIn) {
+        Navigator.of(context).pushNamed('/home');
+      } else {
+        Navigator.of(context).pushNamed('/login');
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
