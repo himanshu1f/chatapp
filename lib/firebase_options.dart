@@ -69,7 +69,7 @@ class DefaultFirebaseOptions {
     storageBucket: 'chat-41843.appspot.com',
     androidClientId: '328261895786-drs63dc1vpbqe53uipg8fm53qtd5n9uq.apps.googleusercontent.com',
     iosClientId: '328261895786-ofeoc0p7h7h0a47ehjkuhjqvikfgghf0.apps.googleusercontent.com',
-    iosBundleId: 'com.example.chat',
+    iosBundleId: 'com.example.chatapp',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
@@ -80,6 +80,6 @@ class DefaultFirebaseOptions {
     storageBucket: 'chat-41843.appspot.com',
     androidClientId: '328261895786-drs63dc1vpbqe53uipg8fm53qtd5n9uq.apps.googleusercontent.com',
     iosClientId: '328261895786-ofeoc0p7h7h0a47ehjkuhjqvikfgghf0.apps.googleusercontent.com',
-    iosBundleId: 'com.example.chat',
+    iosBundleId: 'com.example.chatapp',
   );
 }
