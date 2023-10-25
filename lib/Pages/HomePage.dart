@@ -23,8 +23,7 @@ class HomeScreenState extends State<HomeScreen> {
   TextEditingController searchTextEditingController = TextEditingController();
   Future<QuerySnapshot>? futureSearchResults;
 
-  homePageHeader()
-  {
+  homePageHeader() {
     return AppBar(
       automaticallyImplyLeading: false,
       actions: <Widget>[
