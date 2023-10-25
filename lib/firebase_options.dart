@@ -44,42 +44,42 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyAGM5n6-l8fGGrVPi3CTqT4ua4zhDavbFw',
-    appId: '1:328261895786:web:be6718f159f8847ea02c13',
-    messagingSenderId: '328261895786',
-    projectId: 'chat-41843',
-    authDomain: 'chat-41843.firebaseapp.com',
-    storageBucket: 'chat-41843.appspot.com',
-    measurementId: 'G-BD778CSTDZ',
+    apiKey: 'AIzaSyDUsA0GzNipMMfNV7XlsT03ZP8lxv82U3c',
+    appId: '1:847114241927:web:2daca1c6a0ac5c0a89b522',
+    messagingSenderId: '847114241927',
+    projectId: 'chat-app-bb519',
+    authDomain: 'chat-app-bb519.firebaseapp.com',
+    storageBucket: 'chat-app-bb519.appspot.com',
+    measurementId: 'G-SWWR2E1J5X',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyAAHPgI8-SXKFH84GwrWzoo5iLr-x5SSBY',
-    appId: '1:328261895786:android:e79d3f4ba0c59fa4a02c13',
-    messagingSenderId: '328261895786',
-    projectId: 'chat-41843',
-    storageBucket: 'chat-41843.appspot.com',
+    apiKey: 'AIzaSyBbLzfKS30iYu5Er4heZg7-LC5u9cEJutA',
+    appId: '1:847114241927:android:39e26770eaa119f089b522',
+    messagingSenderId: '847114241927',
+    projectId: 'chat-app-bb519',
+    storageBucket: 'chat-app-bb519.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyBCkmKDjS8JXGgSRh3LOwZNM4Ae9SMw3TU',
-    appId: '1:328261895786:ios:bb236f9abd83f5daa02c13',
-    messagingSenderId: '328261895786',
-    projectId: 'chat-41843',
-    storageBucket: 'chat-41843.appspot.com',
-    androidClientId: '328261895786-drs63dc1vpbqe53uipg8fm53qtd5n9uq.apps.googleusercontent.com',
-    iosClientId: '328261895786-s4flv5kmj3o6g6i9e4o59rlmp312uomo.apps.googleusercontent.com',
+    apiKey: 'AIzaSyBjMtZN0pvZrQgSexrYlT8ZwtLleG01CGA',
+    appId: '1:847114241927:ios:1ad2c955a83edf3289b522',
+    messagingSenderId: '847114241927',
+    projectId: 'chat-app-bb519',
+    storageBucket: 'chat-app-bb519.appspot.com',
+    androidClientId: '847114241927-djgn1rancd56qsnq8upegbbusbr8onk7.apps.googleusercontent.com',
+    iosClientId: '847114241927-5oenj7jn06iqc74cobst65g77v8s1vqj.apps.googleusercontent.com',
     iosBundleId: 'com.example.chatapp',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyBCkmKDjS8JXGgSRh3LOwZNM4Ae9SMw3TU',
-    appId: '1:328261895786:ios:bb236f9abd83f5daa02c13',
-    messagingSenderId: '328261895786',
-    projectId: 'chat-41843',
-    storageBucket: 'chat-41843.appspot.com',
-    androidClientId: '328261895786-drs63dc1vpbqe53uipg8fm53qtd5n9uq.apps.googleusercontent.com',
-    iosClientId: '328261895786-s4flv5kmj3o6g6i9e4o59rlmp312uomo.apps.googleusercontent.com',
+    apiKey: 'AIzaSyBjMtZN0pvZrQgSexrYlT8ZwtLleG01CGA',
+    appId: '1:847114241927:ios:1ad2c955a83edf3289b522',
+    messagingSenderId: '847114241927',
+    projectId: 'chat-app-bb519',
+    storageBucket: 'chat-app-bb519.appspot.com',
+    androidClientId: '847114241927-djgn1rancd56qsnq8upegbbusbr8onk7.apps.googleusercontent.com',
+    iosClientId: '847114241927-5oenj7jn06iqc74cobst65g77v8s1vqj.apps.googleusercontent.com',
     iosBundleId: 'com.example.chatapp',
   );
 }
