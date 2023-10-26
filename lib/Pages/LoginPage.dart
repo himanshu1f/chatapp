@@ -1,16 +1,19 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:chat/util/colors.dart';
 import 'package:chat/utility/asset_path.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_keychain/flutter_keychain.dart';
 import 'package:intl/intl.dart';
 import 'package:chat/Pages/HomePage.dart';
 import 'package:chat/Widgets/ProgressWidget.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 
 class LoginScreen extends StatefulWidget {
@@ -43,31 +46,39 @@ class LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: colorBg,
-      body: GestureDetector(
-        onTap: controlSignIn,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            const SizedBox(height: 20),
-            Padding(
-              padding: const EdgeInsets.all(1.0),
-              child: isLoading ? circularProgress() : Container(),
-            ),
-            const SizedBox(height: 20),
-            ClipRRect(
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          const SizedBox(height: 20),
+          Padding(
+            padding: const EdgeInsets.all(1.0),
+            child: isLoading ? circularProgress() : Container(),
+          ),
+          const SizedBox(height: 20),
+          Platform.isIOS ? GestureDetector(
+            onTap: signInWithApple,
+            child: ClipRRect(
               borderRadius: BorderRadius.circular(30),
               child: Image.asset(AssetPath().google, fit: BoxFit.fill, width: double.infinity, height: 80),
             ),
-            const SizedBox(height: 10),
-          ],
-        ),
+          ) : const SizedBox(),
+          const SizedBox(height: 20),
+          GestureDetector(
+            onTap: signInWithGoogle,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(30),
+              child: Image.asset(AssetPath().google, fit: BoxFit.fill, width: double.infinity, height: 80),
+            ),
+          ),
+          const SizedBox(height: 10),
+        ],
       ),
     );
   }
 
 
-  controlSignIn() async {
+  signInWithGoogle() async {
     setState(() {
       isLoading = true;
     });
@@ -132,5 +143,49 @@ class LoginScreenState extends State<LoginScreen> {
     setState(() {
       isLoading = false;
     });
+  }
+
+
+  signInWithApple() async {
+    AuthorizationCredentialAppleID credential = await SignInWithApple.getAppleIDCredential(
+      scopes: [
+        AppleIDAuthorizationScopes.email,
+        AppleIDAuthorizationScopes.fullName,
+      ],
+    );
+    String? lastName, firstName, email, authorizationCode, identityToken, userIdentifier;
+    if(credential.email == null){
+      email = await FlutterKeychain.get(key: "email");
+      firstName = await FlutterKeychain.get(key: "firstname");
+      lastName = await FlutterKeychain.get(key: "lastname");
+      authorizationCode = await FlutterKeychain.get(key: "authorizationcode");
+      identityToken = await FlutterKeychain.get(key: "identitytoken");
+      userIdentifier = await FlutterKeychain.get(key: "useridentifier");
+      print("Email => $email");
+      print("firstName => $firstName");
+      print("lastName => $lastName");
+      print("authorizationCode => $authorizationCode");
+      print("identityToken => $identityToken");
+      print("userIdentifier => $userIdentifier");
+    } else {
+      await FlutterKeychain.put(key: "email", value: credential.email!);
+      await FlutterKeychain.put(key: "firstname", value: credential.givenName!);
+      await FlutterKeychain.put(key: "lastname", value: credential.familyName!);
+      await FlutterKeychain.put(key: "authorizationcode", value: credential.authorizationCode);
+      await FlutterKeychain.put(key: "identitytoken", value: credential.identityToken!);
+      await FlutterKeychain.put(key: "useridentifier", value: credential.userIdentifier!);
+      email = await FlutterKeychain.get(key: "email");
+      firstName = await FlutterKeychain.get(key: "firstname");
+      lastName = await FlutterKeychain.get(key: "lastname");
+      authorizationCode = await FlutterKeychain.get(key: "authorizationcode");
+      identityToken = await FlutterKeychain.get(key: "identitytoken");
+      userIdentifier = await FlutterKeychain.get(key: "useridentifier");
+      print("Email => $email");
+      print("firstName => $firstName");
+      print("lastName => $lastName");
+      print("authorizationCode => $authorizationCode");
+      print("identityToken => $identityToken");
+      print("userIdentifier => $userIdentifier");
+    }
   }
 }

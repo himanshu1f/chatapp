@@ -39,6 +39,7 @@ dependencies:
   firebase_auth: ^4.10.1
   google_sign_in: ^6.1.5
   sign_in_with_apple: ^5.0.0
+  flutter_keychain: ^2.4.0
   cloud_firestore: ^4.9.3
   fluttertoast: ^8.2.2
   shared_preferences: ^2.2.2
