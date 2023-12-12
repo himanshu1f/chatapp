@@ -109,7 +109,7 @@ class LoginScreenState extends State<LoginScreen> {
       if(documentSnapshots.isEmpty) {
         UserModel userModel = UserModel(
           id: firebaseUser.uid,
-          nickname: googleUser.displayName,
+          fullName: googleUser.displayName,
           photoUrl: googleUser.photoUrl,
           email: googleUser.email,
           googleId: googleUser.id,

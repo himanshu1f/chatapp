@@ -155,7 +155,7 @@ class UserResult extends StatelessWidget
                   backgroundImage: CachedNetworkImageProvider(eachUser.photoUrl!),
                 ),
                 title: Text(
-                  eachUser.nickname!,
+                  eachUser.fullName!,
                   style: const TextStyle(
                     color: Colors.black, fontSize: 16.0, fontWeight: FontWeight.bold,
                   ),
@@ -179,7 +179,7 @@ class UserResult extends StatelessWidget
         builder: (context) => Chat(
             receiverId: eachUser.id,
             receiverAvatar: eachUser.photoUrl,
-            receiverName: eachUser.nickname)));
+            receiverName: eachUser.fullName)));
   }
 
 }
