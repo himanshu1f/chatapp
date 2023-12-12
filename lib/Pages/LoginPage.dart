@@ -103,7 +103,7 @@ class LoginScreenState extends State<LoginScreen> {
 
       final List<DocumentSnapshot> documentSnapshots = resultQuery.docs;
 
-      String dateTime = DateFormat("MMMM dd, yyyy HH:MM a").format(DateTime.now()).toString();
+      String dateTime = DateFormat("MMMM dd, yyyy hh:mm:ss a").format(DateTime.now()).toString();
 
       //Save Data to firestore - if new user
       if(documentSnapshots.isEmpty) {
