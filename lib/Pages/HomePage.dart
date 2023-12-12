@@ -71,15 +71,13 @@ class HomeScreenState extends State<HomeScreen> {
     });
   }
 
-  emptyTextFormField()
-  {
+  emptyTextFormField() {
     searchTextEditingController.clear();
   }
 
 
   @override
-  Widget build(BuildContext context)
-  {
+  Widget build(BuildContext context) {
     return Scaffold(
     appBar: homePageHeader(),
       body: futureSearchResults == null ? displayNoSearchResultScreen() : displayTheUserFoundScreen(),
@@ -97,7 +95,7 @@ class HomeScreenState extends State<HomeScreen> {
         for (var document in dataSnapshot.data!.docs) {
           UserModel eachUser = UserModel.fromDocument(document);
           UserResult userResult = UserResult(eachUser);
-          if(widget.currentUserId != document["id"]) {
+          if(widget.currentUserId!.toLowerCase() != document["googleId"].toString().toLowerCase()) {
            searchUserResult.add(userResult);
           }
         }
@@ -107,8 +105,7 @@ class HomeScreenState extends State<HomeScreen> {
   }
 
 
-  displayNoSearchResultScreen()
-  {
+  displayNoSearchResultScreen() {
     final Orientation orientation = MediaQuery.of(context).orientation;
 
     return Container(
@@ -131,8 +128,7 @@ class HomeScreenState extends State<HomeScreen> {
 
 
 
-class UserResult extends StatelessWidget
-{
+class UserResult extends StatelessWidget {
 
   final UserModel eachUser;
   UserResult(this.eachUser);

@@ -123,6 +123,8 @@ class LoginScreenState extends State<LoginScreen> {
 
         FirebaseFirestore.instance.collection("users").doc(googleUser.id)
             .set(userModel.toJson());
+
+        preferences!.setString("googleId", googleUser.id);
       } else {
         await FirebaseFirestore.instance.collection("users").doc(googleUser.id).update({
           "fullName" : googleUser.displayName,
@@ -131,6 +133,7 @@ class LoginScreenState extends State<LoginScreen> {
           "googleServerAuthCode": googleUser.serverAuthCode,
           "platform": Platform.isAndroid ? "Android" : Platform.isIOS ? "iOS" : "unknown",
         });
+        preferences!.setString("googleId", googleUser.id);
       }
       Fluttertoast.showToast(msg: "Congratulation, Sign in Successful");
 
