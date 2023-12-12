@@ -3,23 +3,23 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>328261895786-ofeoc0p7h7h0a47ehjkuhjqvikfgghf0.apps.googleusercontent.com</string>
+	<string>847114241927-5oenj7jn06iqc74cobst65g77v8s1vqj.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.328261895786-ofeoc0p7h7h0a47ehjkuhjqvikfgghf0</string>
+	<string>com.googleusercontent.apps.847114241927-5oenj7jn06iqc74cobst65g77v8s1vqj</string>
 	<key>ANDROID_CLIENT_ID</key>
-	<string>328261895786-drs63dc1vpbqe53uipg8fm53qtd5n9uq.apps.googleusercontent.com</string>
+	<string>847114241927-djgn1rancd56qsnq8upegbbusbr8onk7.apps.googleusercontent.com</string>
 	<key>API_KEY</key>
-	<string>AIzaSyBCkmKDjS8JXGgSRh3LOwZNM4Ae9SMw3TU</string>
+	<string>AIzaSyBjMtZN0pvZrQgSexrYlT8ZwtLleG01CGA</string>
 	<key>GCM_SENDER_ID</key>
-	<string>328261895786</string>
+	<string>847114241927</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
 	<string>com.example.chatapp</string>
 	<key>PROJECT_ID</key>
-	<string>chat-41843</string>
+	<string>chat-app-bb519</string>
 	<key>STORAGE_BUCKET</key>
-	<string>chat-41843.appspot.com</string>
+	<string>chat-app-bb519.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -31,6 +31,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:328261895786:ios:2f20d1009c3969dfa02c13</string>
+	<string>1:847114241927:ios:1ad2c955a83edf3289b522</string>
 </dict>
 </plist>

@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:chat/Models/user.dart';
 import 'package:chat/util/colors.dart';
 import 'package:chat/utility/asset_path.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -30,7 +31,6 @@ class LoginScreenState extends State<LoginScreen> {
   SharedPreferences? preferences;
   bool isLoggedIn = false;
   bool isLoading = false;
-  User? currentUser;
 
   @override
   void initState() {
@@ -86,60 +86,60 @@ class LoginScreenState extends State<LoginScreen> {
     googleSignIn.signOut();
     GoogleSignInAccount? googleUser = await googleSignIn.signIn();
 
-    print(googleUser!.id);
-    print(googleUser.displayName);
-    print(googleUser.email);
-    print(googleUser.photoUrl);
-    print(googleUser.serverAuthCode);
-    // GoogleSignInAuthentication googleAuthentication = await googleUser!.authentication;
+    GoogleSignInAuthentication googleAuthentication = await googleUser!.authentication;
 
-    // final AuthCredential credential = GoogleAuthProvider.credential(
-    //   idToken: googleAuthentication.idToken,
-    //   accessToken: googleAuthentication.accessToken,
-    // );
-    // User? firebaseUser = (await firebaseAuth.signInWithCredential(credential)).user;
+    final AuthCredential credential = GoogleAuthProvider.credential(
+      idToken: googleAuthentication.idToken,
+      accessToken: googleAuthentication.accessToken,
+    );
 
-    // //SignIn Success
-    // if(firebaseUser != null) {
-    //   //Check if already SignUp
-    //   // final QuerySnapshot resultQuery = await Firestore.instance.collection("users")
-    //   //     .where("id", isEqualTo: firebaseUser.uid).getDocuments();
-    //   final QuerySnapshot resultQuery = await FirebaseFirestore.instance.collection("users")
-    //       .where("id", isEqualTo: firebaseUser.uid).get();
-    //
-    //   final List<DocumentSnapshot> documentSnapshots = resultQuery.docs;
-    //
-    //   //Save Data to firestore - if new user
-    //   if(documentSnapshots.isEmpty) {
-    //     FirebaseFirestore.instance.collection("users").doc(firebaseUser.uid).set({
-    //       "nickname" : firebaseUser.displayName,
-    //       "photoUrl" : firebaseUser.photoURL,
-    //       "id" : firebaseUser.uid,
-    //       "aboutMe" : "I am using Himo Chat app.",
-    //       "createAt" : DateFormat("MMMM dd, yyyy HH:MM a").format(DateTime.now()).toString(),
-    //       "chattingWith" : null,
-    //     });
-    //
-    //     //Write data to Local
-    //     currentUser = firebaseUser;
-    //     await preferences!.setString("id", currentUser!.uid);
-    //     await preferences!.setString("nickname", currentUser!.displayName!);
-    //     // await preferences!.setString("photoUrl", currentUser!.photoURL!);
-    //   } else {
-    //     //Write data to Local
-    //     currentUser = firebaseUser;
-    //     await preferences!.setString("id", documentSnapshots[0]["id"]);
-    //     await preferences!.setString("nickname", documentSnapshots[0]["nickname"]);
-    //     // await preferences!.setString("photoUrl", documentSnapshots[0]["photoUrl"]);
-    //     await preferences!.setString("aboutMe", documentSnapshots[0]["aboutMe"]);
-    //   }
-    //   Fluttertoast.showToast(msg: "Congratulation, Sign in Successful");
-    //
-    //   Navigator.of(context).pushNamed('/home');
-    // } else {
-    //   //SignIn Not Success - SignIn Failed
-    //   Fluttertoast.showToast(msg: "Try Again, Sign in Failed");
-    // }
+    User? firebaseUser = (await firebaseAuth.signInWithCredential(credential)).user;
+
+    //SignIn Success
+    if(firebaseUser != null) {
+      //Check if already SignUp
+      final QuerySnapshot resultQuery = await FirebaseFirestore.instance.collection("users")
+          .where("email", isEqualTo: googleUser.email).get();
+
+      final List<DocumentSnapshot> documentSnapshots = resultQuery.docs;
+
+      String dateTime = DateFormat("MMMM dd, yyyy HH:MM a").format(DateTime.now()).toString();
+
+      //Save Data to firestore - if new user
+      if(documentSnapshots.isEmpty) {
+        UserModel userModel = UserModel(
+          id: firebaseUser.uid,
+          nickname: googleUser.displayName,
+          photoUrl: googleUser.photoUrl,
+          email: googleUser.email,
+          googleId: googleUser.id,
+          googleServerAuthCode: googleUser.serverAuthCode,
+          provider: "Google",
+          platform: Platform.isAndroid ? "Android" : Platform.isIOS ? "iOS" : "unknown",
+          chattingWith: null,
+          aboutMe: "I am using Himo Chat app.",
+          lastLogin: dateTime,
+          createdAt: dateTime,
+        );
+
+        FirebaseFirestore.instance.collection("users").doc(googleUser.id)
+            .set(userModel.toJson());
+      } else {
+        await FirebaseFirestore.instance.collection("users").doc(googleUser.id).update({
+          "nickname" : googleUser.displayName,
+          "photoUrl" : googleUser.photoUrl,
+          "lastLogin" : dateTime,
+          "googleServerAuthCode": googleUser.serverAuthCode,
+          "platform": Platform.isAndroid ? "Android" : Platform.isIOS ? "iOS" : "unknown",
+        });
+      }
+      Fluttertoast.showToast(msg: "Congratulation, Sign in Successful");
+
+      Navigator.of(context).pushNamed('/home');
+    } else {
+      //SignIn Not Success - SignIn Failed
+      Fluttertoast.showToast(msg: "Try Again, Sign in Failed");
+    }
     setState(() {
       isLoading = false;
     });

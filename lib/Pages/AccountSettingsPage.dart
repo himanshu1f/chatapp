@@ -74,9 +74,9 @@ class SettingsScreenState extends State<SettingsScreen>
   {
     preferences = await SharedPreferences.getInstance();
 
-    id = preferences!.getString("id")!;
-    nickname = preferences!.getString("nickname")!;
-    aboutMe = preferences!.getString("aboutMe")!;
+    // id = preferences!.getString("id")!;
+    // nickname = preferences!.getString("nickname")!;
+    // aboutMe = preferences!.getString("aboutMe")!;
     // photoUrl = preferences!.getString("photoUrl")!;
 
     nicknameTextEditingController = TextEditingController(text: nickname);
