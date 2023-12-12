@@ -75,7 +75,7 @@ class SettingsScreenState extends State<SettingsScreen>
     preferences = await SharedPreferences.getInstance();
 
     // id = preferences!.getString("id")!;
-    // nickname = preferences!.getString("nickname")!;
+    // nickname = preferences!.getString("fullName")!;
     // aboutMe = preferences!.getString("aboutMe")!;
     // photoUrl = preferences!.getString("photoUrl")!;
 
@@ -118,7 +118,7 @@ class SettingsScreenState extends State<SettingsScreen>
     //         FirebaseFirestore.instance.collection("users").doc(id).updateData({
     //           "photoUrl" : photoUrl,
     //           "aboutMe" : aboutMe,
-    //           "nickname" : nickname,
+    //           "fullName" : nickname,
     //         }).then((data) async {
     //           await preferences!.setString("photoUrl", photoUrl);
     //           setState(() {
@@ -153,11 +153,11 @@ class SettingsScreenState extends State<SettingsScreen>
    FirebaseFirestore.instance.collection("users").doc(id).update({
      "photoUrl": photoUrl,
      "aboutMe": aboutMe,
-     "nickname": nickname,
+     "fullName": nickname,
    }).then((data) async
    {
      await preferences!.setString("photoUrl", photoUrl);
-     await preferences!.setString("nickname", nickname);
+     await preferences!.setString("fullName", nickname);
      await preferences!.setString("aboutMe", aboutMe);
 
      setState(() {

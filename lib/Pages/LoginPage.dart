@@ -116,7 +116,6 @@ class LoginScreenState extends State<LoginScreen> {
           googleServerAuthCode: googleUser.serverAuthCode,
           provider: "Google",
           platform: Platform.isAndroid ? "Android" : Platform.isIOS ? "iOS" : "unknown",
-          chattingWith: null,
           aboutMe: "I am using Himo Chat app.",
           lastLogin: dateTime,
           createdAt: dateTime,
@@ -126,7 +125,7 @@ class LoginScreenState extends State<LoginScreen> {
             .set(userModel.toJson());
       } else {
         await FirebaseFirestore.instance.collection("users").doc(googleUser.id).update({
-          "nickname" : googleUser.displayName,
+          "fullName" : googleUser.displayName,
           "photoUrl" : googleUser.photoUrl,
           "lastLogin" : dateTime,
           "googleServerAuthCode": googleUser.serverAuthCode,

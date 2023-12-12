@@ -65,7 +65,7 @@ class HomeScreenState extends State<HomeScreen> {
 
   controlSearching(String userName) {
     Future<QuerySnapshot> allFoundUsers = FirebaseFirestore.instance.collection("users")
-        .where("nickname", isGreaterThanOrEqualTo: userName).get();
+        .where("fullName", isGreaterThanOrEqualTo: userName).get();
     setState(() {
       futureSearchResults = allFoundUsers;
     });

@@ -31,7 +31,7 @@ class UserModel {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = id;
-    data['nickname'] = fullName;
+    data['fullName'] = fullName;
     data['photoUrl'] = photoUrl;
     data['email'] = email;
     data['createdAt'] = createdAt;
@@ -49,7 +49,7 @@ class UserModel {
       id: doc.id,
       photoUrl: doc['photoUrl'],
       email: doc['email'],
-      fullName: doc['nickname'],
+      fullName: doc['fullName'],
       createdAt: doc['createdAt'],
       lastLogin: doc['lastLogin'],
       aboutMe: doc['aboutMe'],
