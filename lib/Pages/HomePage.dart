@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chat/Models/user.dart';
 import 'package:chat/Pages/AccountSettingsPage.dart';
+import 'package:chat/Pages/all_users.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:chat/Pages/ChattingPage.dart';
@@ -28,31 +29,33 @@ class HomeScreenState extends State<HomeScreen> {
       automaticallyImplyLeading: false,
       actions: <Widget>[
         IconButton(
-          icon: Icon(Icons.settings, size: 30.0, color: Colors.white,),
+          icon: const Icon(Icons.settings, size: 30.0, color: Colors.black),
           onPressed: (){
-            Navigator.push(context, MaterialPageRoute(builder: (context) => AccountSettings()));
+            Navigator.push(context, MaterialPageRoute(builder: (context) => const AccountSettings()));
           },
         ),
       ],
-      backgroundColor: Colors.lightBlue,
+      elevation: 0,
+      backgroundColor: Colors.white,
       title: Container(
         margin: const EdgeInsets.only(bottom: 4.0),
+        color: Colors.white,
         child: TextFormField(
-          style: const TextStyle(fontSize: 18.0, color: Colors.white),
+          style: const TextStyle(fontSize: 18.0, color: Colors.black),
           controller: searchTextEditingController,
+          cursorColor: Colors.black,
           decoration: InputDecoration(
             hintText: "Search here...",
-            hintStyle: const TextStyle(color: Colors.white),
+            hintStyle: const TextStyle(color: Colors.black26),
             enabledBorder: const UnderlineInputBorder(
-              borderSide: BorderSide(color: Colors.grey),
+              borderSide: BorderSide(color: Colors.white),
             ),
             focusedBorder: const UnderlineInputBorder(
               borderSide: BorderSide(color: Colors.white),
             ),
-            filled: true,
-            prefixIcon: const Icon(Icons.person_pin, color: Colors.white, size: 30.0,),
+            prefixIcon: const Icon(Icons.person_pin, color: Colors.black, size: 30.0,),
             suffixIcon: IconButton(
-              icon: const Icon(Icons.clear, color: Colors.white,),
+              icon: const Icon(Icons.clear, color: Colors.black),
               onPressed: emptyTextFormField,
             ),
           ),
@@ -78,9 +81,19 @@ class HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-    appBar: homePageHeader(),
-      body: futureSearchResults == null ? displayNoSearchResultScreen() : displayTheUserFoundScreen(),
+    return GestureDetector(
+      onTap: () => FocusScope.of(context).unfocus(),
+      child: Scaffold(
+        appBar: homePageHeader(),
+        backgroundColor: Colors.white,
+        floatingActionButton: FloatingActionButton(
+          onPressed: (){
+            Navigator.push(context, MaterialPageRoute(builder: (context) => AllUsers(widget.currentUserId!)));
+          },
+          child: const Icon(Icons.chat),
+        ),
+        body: futureSearchResults == null ? displayNoSearchResultScreen() : displayTheUserFoundScreen(),
+      ),
     );
   }
 
@@ -106,21 +119,16 @@ class HomeScreenState extends State<HomeScreen> {
 
 
   displayNoSearchResultScreen() {
-    final Orientation orientation = MediaQuery.of(context).orientation;
-
-    return Container(
-      child: Center(
-        child: ListView(
-          shrinkWrap: true,
-          children: const <Widget>[
-            Icon(Icons.group, color: Colors.lightBlueAccent, size: 200.0,),
-            Text(
-              "Search Users",
-              textAlign: TextAlign.center,
-              style: TextStyle(color: Colors.lightBlueAccent, fontSize: 50.0, fontWeight: FontWeight.w500,),
-            ),
-          ],
-        ),
+    return Center(
+      child: ListView(
+        shrinkWrap: true,
+        children: const <Widget>[
+          Icon(Icons.group, color: Colors.black26, size: 50),
+          Text("Search Users",
+            textAlign: TextAlign.center,
+            style: TextStyle(color: Colors.black26, fontSize: 20.0, fontWeight: FontWeight.w500,),
+          ),
+        ],
       ),
     );
   }
@@ -135,8 +143,7 @@ class UserResult extends StatelessWidget {
 
 
   @override
-  Widget build(BuildContext context)
-  {
+  Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(4.0),
       child: Container(
@@ -148,7 +155,7 @@ class UserResult extends StatelessWidget {
               child: ListTile(
                 leading: CircleAvatar(
                   backgroundColor: Colors.black,
-                  backgroundImage: CachedNetworkImageProvider(eachUser.photoUrl!),
+                  backgroundImage: CachedNetworkImageProvider(eachUser.photoUrl ?? "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_640.png"),
                 ),
                 title: Text(
                   eachUser.fullName!,
