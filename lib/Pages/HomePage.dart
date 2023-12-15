@@ -22,6 +22,7 @@ class HomeScreen extends StatefulWidget {
 class HomeScreenState extends State<HomeScreen> {
 
   TextEditingController searchTextEditingController = TextEditingController();
+  Future<QuerySnapshot>? mainFutureSearchResults;
   Future<QuerySnapshot>? futureSearchResults;
 
   homePageHeader() {
@@ -53,29 +54,21 @@ class HomeScreenState extends State<HomeScreen> {
             focusedBorder: const UnderlineInputBorder(
               borderSide: BorderSide(color: Colors.white),
             ),
-            prefixIcon: const Icon(Icons.person_pin, color: Colors.black, size: 30.0,),
             suffixIcon: IconButton(
               icon: const Icon(Icons.clear, color: Colors.black),
               onPressed: emptyTextFormField,
             ),
           ),
-          onFieldSubmitted: controlSearching,
         ),
       ),
     );
   }
 
-
-  controlSearching(String userName) {
-    Future<QuerySnapshot> allFoundUsers = FirebaseFirestore.instance.collection("users")
-        .where("fullName", isGreaterThanOrEqualTo: userName).get();
-    setState(() {
-      futureSearchResults = allFoundUsers;
-    });
-  }
-
   emptyTextFormField() {
-    searchTextEditingController.clear();
+    setState(() {
+      searchTextEditingController.clear();
+      futureSearchResults = mainFutureSearchResults;
+    });
   }
 
 
@@ -90,6 +83,7 @@ class HomeScreenState extends State<HomeScreen> {
           onPressed: (){
             Navigator.push(context, MaterialPageRoute(builder: (context) => AllUsers(widget.currentUserId!)));
           },
+          backgroundColor: Colors.black,
           child: const Icon(Icons.chat),
         ),
         body: futureSearchResults == null ? displayNoSearchResultScreen() : displayTheUserFoundScreen(),

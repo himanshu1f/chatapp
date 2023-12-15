@@ -15,10 +15,50 @@ class AllUsers extends StatefulWidget {
 class _AllUserState extends State<AllUsers> {
 
   Future<QuerySnapshot>? futureSearchResults;
+  bool isSearchEnable = false;
+  TextEditingController searchTextEditingController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        iconTheme: const IconThemeData(
+          color: Colors.white,
+        ),
+        backgroundColor: Colors.black,
+        title: isSearchEnable ? Container(
+          margin: const EdgeInsets.only(bottom: 4.0),
+          color: Colors.transparent,
+          child: TextFormField(
+            style: const TextStyle(fontSize: 18.0, color: Colors.white),
+            controller: searchTextEditingController,
+            cursorColor: Colors.white,
+            decoration: const InputDecoration(
+              hintText: "Search here...",
+              hintStyle: TextStyle(color: Colors.white24),
+            ),
+            onChanged: performSearch,
+          ),
+        ) : const Text(
+          "All User",
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        ),
+        centerTitle: true,
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(isSearchEnable ? Icons.clear : Icons.search , size: 30.0, color: Colors.white),
+            onPressed: (){
+              setState(() {
+                isSearchEnable = !isSearchEnable;
+                if(isSearchEnable){
+                  searchTextEditingController.clear();
+                  performSearch("");
+                }
+              });
+            },
+          ),
+        ],
+      ),
       backgroundColor: Colors.white,
       body: displayTheUserFoundScreen(),
     );
@@ -54,6 +94,14 @@ class _AllUserState extends State<AllUsers> {
   controlSearching() {
     Future<QuerySnapshot> allFoundUsers = FirebaseFirestore.instance.collection("users")
         .where("googleId", isNotEqualTo: widget.currentUserId).get();
+    setState(() {
+      futureSearchResults = allFoundUsers;
+    });
+  }
+
+  performSearch(String value) {
+    Future<QuerySnapshot> allFoundUsers = FirebaseFirestore.instance.collection("users")
+        .where("fullName", isGreaterThanOrEqualTo: value.toLowerCase()).get();
     setState(() {
       futureSearchResults = allFoundUsers;
     });
